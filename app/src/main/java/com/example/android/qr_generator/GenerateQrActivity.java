@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -79,6 +80,26 @@ public class GenerateQrActivity extends AppCompatActivity {
 
         saveImage_button.setOnClickListener(new View.OnClickListener() {
             @Override
+            public void onClick(View v) {
+                if (flag == 1){
+                    BitmapDrawable drawable = (BitmapDrawable) output_imageView.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+                    String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "QR code", "share QR code");
+                    Uri bitmapUri = Uri.parse(bitmapPath);
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(GenerateQrActivity.this, "Generate image first", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        /*saveImage_button.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
                 if(ContextCompat.checkSelfPermission(GenerateQrActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_GRANTED) {
@@ -89,15 +110,15 @@ public class GenerateQrActivity extends AppCompatActivity {
                     askPermission();
                 }
             }
-        });
+        });*/
 
     }
 
-    private void askPermission() {
+    /*private void askPermission() {
         ActivityCompat.requestPermissions(GenerateQrActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == REQUEST_CODE) {
             if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -109,9 +130,9 @@ public class GenerateQrActivity extends AppCompatActivity {
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+    }*/
 
-    private void saveImage() {
+    /*private void saveImage() {
         BitmapDrawable draw = (BitmapDrawable) output_imageView.getDrawable();
         Bitmap bitmap = draw.getBitmap();
 
@@ -142,5 +163,5 @@ public class GenerateQrActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         intent.setData(Uri.fromFile(outFile));
         sendBroadcast(intent);
-    }
+    }*/
 }

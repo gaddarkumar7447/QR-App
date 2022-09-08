@@ -75,7 +75,7 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="#3CB371"
         android:fontFamily="sans-serif-medium"
-        android:text="Save to Gallery"
+        android:text="Share Image"
         android:textAllCaps="false" />
 
 </RelativeLayout>
